@@ -112,12 +112,12 @@ function calcHandler(input) {
                     calc.result = calc.operate(calc.operator, calc.num1, calc.num2);
                     calc.operator = btnValue;
                     calc.num1 = calc.result;
-                    display.textContent = calc.result;
+                    display.textContent = isFinite(calc.result) ? calc.result : "ERROR";;
                     calc.state = States.STATE_SECOND_NUM_DIGIT;
                 } else if (btnValue === '=') {
                     calc.num2 = display.textContent;
                     calc.result = calc.operate(calc.operator, calc.num1, calc.num2);
-                    display.textContent = calc.result;
+                    display.textContent = isFinite(calc.result) ? calc.result : "ERROR";
                     calc.state = States.STATE_FIRST_NUM_DIGIT;
                     calc.reset();
                     calc.num1 = display.textContent;
