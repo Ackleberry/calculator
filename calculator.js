@@ -28,6 +28,7 @@ const calc = {
         b = Number(b);
 
         console.log(`OP: ${op}, A: ${a}, B: ${b}`);
+        
         let res;
         switch(op) {
             case '+': 
