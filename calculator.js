@@ -83,6 +83,9 @@ function btnHandler(event) {
                     calc.num1 = display.textContent;
                 } else if (btnValue === '=') {
                     display.textContent = 'ERROR';
+                    calc.state = States.STATE_FIRST_DIGIT;
+                } else if (btnValue === '.' && display.textContent.includes('.')) {
+                    // Ignore extra '.'
                 } else {
                     display.textContent += btnValue;
                 }
@@ -93,6 +96,7 @@ function btnHandler(event) {
                     calc.state = States.STATE_SECOND_NUM;
                 } else if (btnValue === '=') {
                     display.textContent = 'ERROR';
+                    calc.state = States.STATE_FIRST_DIGIT;
                 }
             break;
             case States.STATE_SECOND_NUM:
@@ -108,6 +112,8 @@ function btnHandler(event) {
                     calc.result = calc.operate(calc.operator, calc.num1, calc.num2);
                     display.textContent = calc.result;
                     calc.state = States.STATE_FIRST_DIGIT;
+                } else if (btnValue === '.' && display.textContent.includes('.')) {
+                    // Ignore extra '.'
                 } else {
                     display.textContent += btnValue;
                 }
