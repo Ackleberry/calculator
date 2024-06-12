@@ -21,7 +21,7 @@ const Calc = {
         this.result = '';
     },
     isNumber: function(digit) {
-        return ((digit > 0 && digit < 9) || digit === '.' || digit === '-')
+        return ((digit >= 0 && digit <= 9) || digit === '.' || digit === '-')
     },
     isOperator: function(digit) {
         return (digit === '+' || digit === '-' || digit === '*' || digit === '/' || digit === '%')
@@ -140,11 +140,13 @@ function interfaceInput(event) {
 
 function keyboardInput(event) {
     let key = event.key;
-    console.log(event);
-    if (event.key === 'Enter') {
+    
+    if (Calc.isNumber(key) || Calc.isOperator(key)) {
+        calcHandler(key);
+    } else if (key === 'Enter') {
         key = '=';
+        calcHandler(key);
     }
-    calcHandler(key);
 }
 
 const buttons = document.querySelectorAll('button');
