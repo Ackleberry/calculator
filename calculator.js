@@ -1,20 +1,20 @@
 const States = {
-    STATE_FIRST_NUM_DIGIT: 0,
+    STATE_FIRST_NUM_START: 0,
     STATE_FIRST_NUM: 1,
-    STATE_SECOND_NUM_DIGIT: 2,
+    STATE_SECOND_NUM_START: 2,
     STATE_SECOND_NUM: 3,
 }
 
 const Calc = {
     PRECISION: 100000000000,
-    state: States.STATE_FIRST_NUM_DIGIT,
+    state: States.STATE_FIRST_NUM_START,
     num1: '',
     num2: '',
     operator: '',
     result: '',
 
     reset: function() {
-        this.state = States.STATE_FIRST_NUM_DIGIT;
+        this.state = States.STATE_FIRST_NUM_START;
         this.num1 = '';
         this.num2 = '';
         this.operator = '';
@@ -67,15 +67,15 @@ function calcHandler(input) {
         Calc.reset();
         display.textContent = '';
     } else if (input === 'DEL') {
-        if (Calc.state !== States.STATE_FIRST_NUM_DIGIT) {
+        if (Calc.state !== States.STATE_FIRST_NUM_START) {
             display.textContent = display.textContent.slice(0, -1);
         }
     } else {
         switch(Calc.state) {
-            case States.STATE_FIRST_NUM_DIGIT:
+            case States.STATE_FIRST_NUM_START:
                 if (Calc.isOperator(input) && Calc.num1 !== '') {
                     Calc.operator = input;
-                    Calc.state = States.STATE_SECOND_NUM_DIGIT;
+                    Calc.state = States.STATE_SECOND_NUM_START;
                 } else if (!Calc.isOperator(input) && input !== '=') {
                     display.textContent = input;
                     Calc.state = States.STATE_FIRST_NUM;
@@ -83,25 +83,25 @@ function calcHandler(input) {
             break;
             case States.STATE_FIRST_NUM:
                 if (Calc.isOperator(input)) {
-                    Calc.state = States.STATE_SECOND_NUM_DIGIT;
+                    Calc.state = States.STATE_SECOND_NUM_START;
                     Calc.operator = input;
                     Calc.num1 = display.textContent;
                 } else if (input === '=') {
                     display.textContent = 'ERROR';
-                    Calc.state = States.STATE_FIRST_NUM_DIGIT;
+                    Calc.state = States.STATE_FIRST_NUM_START;
                 } else if (input === '.' && display.textContent.includes('.')) {
                     // Ignore extra '.'
                 } else {
                     display.textContent += input;
                 }
             break;
-            case States.STATE_SECOND_NUM_DIGIT:
+            case States.STATE_SECOND_NUM_START:
                 if (!Calc.isOperator(input) && input !== '=') {
                     display.textContent = input;
                     Calc.state = States.STATE_SECOND_NUM;
                 } else if (input === '=') {
                     display.textContent = 'ERROR';
-                    Calc.state = States.STATE_FIRST_NUM_DIGIT;
+                    Calc.state = States.STATE_FIRST_NUM_START;
                 }
             break;
             case States.STATE_SECOND_NUM:
@@ -111,12 +111,12 @@ function calcHandler(input) {
                     Calc.operator = input;
                     Calc.num1 = Calc.result;
                     display.textContent = isFinite(Calc.result) ? Calc.result : "ERROR";;
-                    Calc.state = States.STATE_SECOND_NUM_DIGIT;
+                    Calc.state = States.STATE_SECOND_NUM_START;
                 } else if (input === '=') {
                     Calc.num2 = display.textContent;
                     Calc.result = Calc.operate(Calc.operator, Calc.num1, Calc.num2);
                     display.textContent = isFinite(Calc.result) ? Calc.result : "ERROR";
-                    Calc.state = States.STATE_FIRST_NUM_DIGIT;
+                    Calc.state = States.STATE_FIRST_NUM_START;
                     Calc.reset();
                     Calc.num1 = display.textContent;
                 } else if (input === '.' && display.textContent.includes('.')) {
