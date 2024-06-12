@@ -70,7 +70,7 @@ function calcHandler(input) {
         display.textContent = '';
     } else if (btnValue === 'DEL') {
         if (calc.state !== States.STATE_FIRST_NUM_DIGIT) {
-        display.textContent = display.textContent.slice(0, -1);
+            display.textContent = display.textContent.slice(0, -1);
         }
     } else {
         switch(calc.state) {
@@ -81,8 +81,6 @@ function calcHandler(input) {
                 } else if (!calc.isOperator(btnValue) && btnValue !== '=') {
                     display.textContent = btnValue;
                     calc.state = States.STATE_FIRST_NUM;
-                } else if (btnValue === '=') {
-                    display.textContent = 'ERROR';
                 }
             break;
             case States.STATE_FIRST_NUM:
