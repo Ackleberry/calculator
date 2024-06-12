@@ -5,6 +5,7 @@ const States = {
 }
 
 const calc = {
+    PRECISION: 100000000000,
     state: States.STATE_IDLE,
     num1: 0,
     num2: 0,
@@ -18,21 +19,6 @@ const calc = {
         this.operator = '+',
         this.result = 0
     },
-    add: function(a, b) {
-        return a + b;
-    },
-    sub: function(a, b) {
-        return a - b;
-    },
-    mult: function(a, b) {
-        return a * b;
-    },
-    div: function(a, b) {
-        return a / b;
-    },
-    mod: function(a, b) {
-        return a % b;
-    },
     isOperator: function(op) {
         return (op === '+' || op === '-' || op === '*' || op === '/' || op === '%')
     },
@@ -41,25 +27,29 @@ const calc = {
         let res;
         switch(op) {
             case '+': 
-                res = this.add(a, b);
+                res = a + b;
             break;
             case '-':
-                res = this.sub(a, b);
+                res = a - b;
             break;
             case '*':
-                res = this.mult(a, b);
+                res = a * b;
             break;
             case '/':
-                res = this.div(a, b);
+                res = a / b;
             break;
             case '%':
-                res = this.mod(a,b);
+                res = a % b;
             break;
             default:
                 console.log("ERROR: Unknown operator.");
             break;
         }
     
+        if (!Number.isInteger(a) || !Number.isInteger(b)) {
+            res = Math.round(this.PRECISION * res) / this.PRECISION;
+        }
+
         return res;
     }
 }
@@ -102,6 +92,7 @@ function btnHandler(event) {
                     display.textContent = calc.result;
                     calc.state = States.STATE_IDLE;
                 } else {
+                    // Bug here. Entering 0.25 + 0.256 -> 2nd number is cleared because its equal to calc.num1
                     if (display.textContent == calc.num1) {
                         display.textContent = btnValue;
                     } else {
