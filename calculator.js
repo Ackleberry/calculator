@@ -58,8 +58,8 @@ const calc = {
     }
 }
 
-function btnHandler(event) {
-    let btnValue = event.target.innerText;
+function calcHandler(input) {
+    let btnValue = input;
 
     if (btnValue === 'CLR') {
         calc.reset();
@@ -112,6 +112,7 @@ function btnHandler(event) {
                     calc.result = calc.operate(calc.operator, calc.num1, calc.num2);
                     display.textContent = calc.result;
                     calc.state = States.STATE_FIRST_DIGIT;
+                    calc.reset();
                 } else if (btnValue === '.' && display.textContent.includes('.')) {
                     // Ignore extra '.'
                 } else {
@@ -125,11 +126,25 @@ function btnHandler(event) {
     }
 }
 
+function interfaceInput(event) {
+    calcHandler(event.target.innerText);
+}
+
+function keyboardInput(event) {
+    let key = event.key;
+    console.log(event);
+    if (event.key === 'Enter') {
+        key = '=';
+    }
+    calcHandler(key);
+}
+
 const buttons = document.querySelectorAll('button');
 buttons.forEach((button) => {
-    button.addEventListener('click', btnHandler);
+    button.addEventListener('click', interfaceInput);
 })
 
+document.addEventListener('keypress', keyboardInput);
 let display = document.querySelector('.display');
-display.textContent = "";
+calc.reset()
 
