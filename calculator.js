@@ -88,6 +88,9 @@ function btnHandler(event) {
                 display.textContent += btnValue;
             }
         break;
+        default:
+            console.log("ERROR: Unknown calculator state!");
+        break;
     }
 }
 
