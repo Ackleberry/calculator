@@ -33,9 +33,9 @@ const calc = {
     isOperator: function(op) {
         return (op === '+' || op === '-' || op === '*' || op === '/' || op === '%')
     },
-    operate: function(operator, a, b) {
+    operate: function(op, a, b) {
         let res;
-        switch(operator) {
+        switch(op) {
             case '+': 
                 res = this.add(a, b);
             break;
