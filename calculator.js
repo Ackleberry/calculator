@@ -66,7 +66,9 @@ function calcHandler(input) {
         calc.reset();
         display.textContent = '';
     } else if (btnValue === 'DEL') {
+        if (calc.state !== States.STATE_FIRST_NUM_DIGIT) {
         display.textContent = display.textContent.slice(0, -1);
+        }
     } else {
         switch(calc.state) {
             case States.STATE_FIRST_NUM_DIGIT:
