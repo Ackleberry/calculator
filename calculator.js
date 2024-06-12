@@ -5,7 +5,7 @@ const States = {
     STATE_SECOND_NUM: 3,
 }
 
-const calc = {
+const Calc = {
     PRECISION: 100000000000,
     state: States.STATE_FIRST_NUM_DIGIT,
     num1: '',
@@ -66,31 +66,31 @@ function calcHandler(input) {
     let btnValue = input;
 
     if (btnValue === 'CLR') {
-        calc.reset();
+        Calc.reset();
         display.textContent = '';
     } else if (btnValue === 'DEL') {
-        if (calc.state !== States.STATE_FIRST_NUM_DIGIT) {
+        if (Calc.state !== States.STATE_FIRST_NUM_DIGIT) {
             display.textContent = display.textContent.slice(0, -1);
         }
     } else {
-        switch(calc.state) {
+        switch(Calc.state) {
             case States.STATE_FIRST_NUM_DIGIT:
-                if (calc.isOperator(btnValue) && calc.num1 !== '') {
-                    calc.operator = btnValue;
-                    calc.state = States.STATE_SECOND_NUM_DIGIT;
-                } else if (!calc.isOperator(btnValue) && btnValue !== '=') {
+                if (Calc.isOperator(btnValue) && Calc.num1 !== '') {
+                    Calc.operator = btnValue;
+                    Calc.state = States.STATE_SECOND_NUM_DIGIT;
+                } else if (!Calc.isOperator(btnValue) && btnValue !== '=') {
                     display.textContent = btnValue;
-                    calc.state = States.STATE_FIRST_NUM;
+                    Calc.state = States.STATE_FIRST_NUM;
                 }
             break;
             case States.STATE_FIRST_NUM:
-                if (calc.isOperator(btnValue)) {
-                    calc.state = States.STATE_SECOND_NUM_DIGIT;
-                    calc.operator = btnValue;
-                    calc.num1 = display.textContent;
+                if (Calc.isOperator(btnValue)) {
+                    Calc.state = States.STATE_SECOND_NUM_DIGIT;
+                    Calc.operator = btnValue;
+                    Calc.num1 = display.textContent;
                 } else if (btnValue === '=') {
                     display.textContent = 'ERROR';
-                    calc.state = States.STATE_FIRST_NUM_DIGIT;
+                    Calc.state = States.STATE_FIRST_NUM_DIGIT;
                 } else if (btnValue === '.' && display.textContent.includes('.')) {
                     // Ignore extra '.'
                 } else {
@@ -98,29 +98,29 @@ function calcHandler(input) {
                 }
             break;
             case States.STATE_SECOND_NUM_DIGIT:
-                if (!calc.isOperator(btnValue) && btnValue !== '=') {
+                if (!Calc.isOperator(btnValue) && btnValue !== '=') {
                     display.textContent = btnValue;
-                    calc.state = States.STATE_SECOND_NUM;
+                    Calc.state = States.STATE_SECOND_NUM;
                 } else if (btnValue === '=') {
                     display.textContent = 'ERROR';
-                    calc.state = States.STATE_FIRST_NUM_DIGIT;
+                    Calc.state = States.STATE_FIRST_NUM_DIGIT;
                 }
             break;
             case States.STATE_SECOND_NUM:
-                if (calc.isOperator(btnValue)) {
-                    calc.num2 = display.textContent;
-                    calc.result = calc.operate(calc.operator, calc.num1, calc.num2);
-                    calc.operator = btnValue;
-                    calc.num1 = calc.result;
-                    display.textContent = isFinite(calc.result) ? calc.result : "ERROR";;
-                    calc.state = States.STATE_SECOND_NUM_DIGIT;
+                if (Calc.isOperator(btnValue)) {
+                    Calc.num2 = display.textContent;
+                    Calc.result = Calc.operate(Calc.operator, Calc.num1, Calc.num2);
+                    Calc.operator = btnValue;
+                    Calc.num1 = Calc.result;
+                    display.textContent = isFinite(Calc.result) ? Calc.result : "ERROR";;
+                    Calc.state = States.STATE_SECOND_NUM_DIGIT;
                 } else if (btnValue === '=') {
-                    calc.num2 = display.textContent;
-                    calc.result = calc.operate(calc.operator, calc.num1, calc.num2);
-                    display.textContent = isFinite(calc.result) ? calc.result : "ERROR";
-                    calc.state = States.STATE_FIRST_NUM_DIGIT;
-                    calc.reset();
-                    calc.num1 = display.textContent;
+                    Calc.num2 = display.textContent;
+                    Calc.result = Calc.operate(Calc.operator, Calc.num1, Calc.num2);
+                    display.textContent = isFinite(Calc.result) ? Calc.result : "ERROR";
+                    Calc.state = States.STATE_FIRST_NUM_DIGIT;
+                    Calc.reset();
+                    Calc.num1 = display.textContent;
                 } else if (btnValue === '.' && display.textContent.includes('.')) {
                     // Ignore extra '.'
                 } else {
@@ -154,5 +154,5 @@ buttons.forEach((button) => {
 
 document.addEventListener('keypress', keyboardInput);
 let display = document.querySelector('.display');
-calc.reset()
+Calc.reset()
 
