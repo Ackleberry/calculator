@@ -63,68 +63,66 @@ const Calc = {
 }
 
 function calcHandler(input) {
-    let btnValue = input;
-
-    if (btnValue === 'CLR') {
+    if (input === 'CLR') {
         Calc.reset();
         display.textContent = '';
-    } else if (btnValue === 'DEL') {
+    } else if (input === 'DEL') {
         if (Calc.state !== States.STATE_FIRST_NUM_DIGIT) {
             display.textContent = display.textContent.slice(0, -1);
         }
     } else {
         switch(Calc.state) {
             case States.STATE_FIRST_NUM_DIGIT:
-                if (Calc.isOperator(btnValue) && Calc.num1 !== '') {
-                    Calc.operator = btnValue;
+                if (Calc.isOperator(input) && Calc.num1 !== '') {
+                    Calc.operator = input;
                     Calc.state = States.STATE_SECOND_NUM_DIGIT;
-                } else if (!Calc.isOperator(btnValue) && btnValue !== '=') {
-                    display.textContent = btnValue;
+                } else if (!Calc.isOperator(input) && input !== '=') {
+                    display.textContent = input;
                     Calc.state = States.STATE_FIRST_NUM;
                 }
             break;
             case States.STATE_FIRST_NUM:
-                if (Calc.isOperator(btnValue)) {
+                if (Calc.isOperator(input)) {
                     Calc.state = States.STATE_SECOND_NUM_DIGIT;
-                    Calc.operator = btnValue;
+                    Calc.operator = input;
                     Calc.num1 = display.textContent;
-                } else if (btnValue === '=') {
+                } else if (input === '=') {
                     display.textContent = 'ERROR';
                     Calc.state = States.STATE_FIRST_NUM_DIGIT;
-                } else if (btnValue === '.' && display.textContent.includes('.')) {
+                } else if (input === '.' && display.textContent.includes('.')) {
                     // Ignore extra '.'
                 } else {
-                    display.textContent += btnValue;
+                    display.textContent += input;
                 }
             break;
             case States.STATE_SECOND_NUM_DIGIT:
-                if (!Calc.isOperator(btnValue) && btnValue !== '=') {
-                    display.textContent = btnValue;
+                if (!Calc.isOperator(input) && input !== '=') {
+                    display.textContent = input;
                     Calc.state = States.STATE_SECOND_NUM;
-                } else if (btnValue === '=') {
+                } else if (input === '=') {
                     display.textContent = 'ERROR';
                     Calc.state = States.STATE_FIRST_NUM_DIGIT;
                 }
             break;
             case States.STATE_SECOND_NUM:
-                if (Calc.isOperator(btnValue)) {
+                if (Calc.isOperator(input)) {
                     Calc.num2 = display.textContent;
                     Calc.result = Calc.operate(Calc.operator, Calc.num1, Calc.num2);
-                    Calc.operator = btnValue;
+                    Calc.operator = input;
                     Calc.num1 = Calc.result;
                     display.textContent = isFinite(Calc.result) ? Calc.result : "ERROR";;
                     Calc.state = States.STATE_SECOND_NUM_DIGIT;
-                } else if (btnValue === '=') {
+                } else if (input === '=') {
                     Calc.num2 = display.textContent;
                     Calc.result = Calc.operate(Calc.operator, Calc.num1, Calc.num2);
                     display.textContent = isFinite(Calc.result) ? Calc.result : "ERROR";
                     Calc.state = States.STATE_FIRST_NUM_DIGIT;
                     Calc.reset();
                     Calc.num1 = display.textContent;
-                } else if (btnValue === '.' && display.textContent.includes('.')) {
+                } else if (input === '.' && display.textContent.includes('.')) {
                     // Ignore extra '.'
                 } else {
-                    display.textContent += btnValue;
+                    display.textContent += input;
                 }
             break;
             default:
