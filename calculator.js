@@ -1,28 +1,32 @@
 const States = {
-    STATE_IDLE: 0,
+    STATE_FIRST_DIGIT: 0,
     STATE_FIRST_NUM: 1,
-    STATE_SECOND_NUM: 2,
+    STATE_SECOND_DIGIT: 2,
+    STATE_SECOND_NUM: 3,
 }
 
 const calc = {
     PRECISION: 100000000000,
-    state: States.STATE_IDLE,
-    num1: 0,
-    num2: 0,
-    operator: '+',
-    result: 0,
+    state: States.STATE_FIRST_DIGIT,
+    num1: '',
+    num2: '',
+    operator: '',
+    result: '',
 
     reset: function() {
-        this.state = States.STATE_IDLE,
-        this.num1 = 0,
-        this.num2 = 0,
-        this.operator = '+',
-        this.result = 0
+        this.state = States.STATE_FIRST_DIGIT;
+        this.num1 = '';
+        this.num2 = '';
+        this.operator = '';
+        this.result = '';
     },
     isOperator: function(op) {
         return (op === '+' || op === '-' || op === '*' || op === '/' || op === '%')
     },
     operate: function(op, a, b) {
+        a = Number(a);
+        b = Number(b);
+
         console.log(`OP: ${op}, A: ${a}, B: ${b}`);
         let res;
         switch(op) {
@@ -64,40 +68,48 @@ function btnHandler(event) {
         display.textContent = display.textContent.slice(0, -1);
     } else {
         switch(calc.state) {
-            case States.STATE_IDLE:
-                if (!calc.isOperator(btnValue)) {
+            case States.STATE_FIRST_DIGIT:
+                if (!calc.isOperator(btnValue) && btnValue !== '=') {
                     display.textContent = btnValue;
                     calc.state = States.STATE_FIRST_NUM;
+                } else if (btnValue === '=') {
+                    display.textContent = 'ERROR';
                 }
             break;
             case States.STATE_FIRST_NUM:
                 if (calc.isOperator(btnValue)) {
-                    calc.state = States.STATE_SECOND_NUM;
+                    calc.state = States.STATE_SECOND_DIGIT;
                     calc.operator = btnValue;
-                    calc.num1 = Number(display.textContent);
+                    calc.num1 = display.textContent;
+                } else if (btnValue === '=') {
+                    display.textContent = 'ERROR';
                 } else {
                     display.textContent += btnValue;
                 }
             break;
+            case States.STATE_SECOND_DIGIT:
+                if (!calc.isOperator(btnValue) && btnValue !== '=') {
+                    display.textContent = btnValue;
+                    calc.state = States.STATE_SECOND_NUM;
+                } else if (btnValue === '=') {
+                    display.textContent = 'ERROR';
+                }
+            break;
             case States.STATE_SECOND_NUM:
                 if (calc.isOperator(btnValue)) {
-                    calc.num2 = Number(display.textContent);
+                    calc.num2 = display.textContent;
                     calc.result = calc.operate(calc.operator, calc.num1, calc.num2);
                     calc.operator = btnValue;
                     calc.num1 = calc.result;
                     display.textContent = calc.result;
+                    calc.state = States.STATE_SECOND_DIGIT;
                 } else if (btnValue === '=') {
-                    calc.num2 = Number(display.textContent);
+                    calc.num2 = display.textContent;
                     calc.result = calc.operate(calc.operator, calc.num1, calc.num2);
                     display.textContent = calc.result;
-                    calc.state = States.STATE_IDLE;
+                    calc.state = States.STATE_FIRST_DIGIT;
                 } else {
-                    // Bug here. Entering 0.25 + 0.256 -> 2nd number is cleared because its equal to calc.num1
-                    if (display.textContent == calc.num1) {
-                        display.textContent = btnValue;
-                    } else {
-                        display.textContent += btnValue;
-                    }
+                    display.textContent += btnValue;
                 }
             break;
             default:
