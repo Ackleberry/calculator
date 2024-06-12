@@ -20,8 +20,11 @@ const calc = {
         this.operator = '';
         this.result = '';
     },
-    isOperator: function(op) {
-        return (op === '+' || op === '-' || op === '*' || op === '/' || op === '%')
+    isNumber: function(digit) {
+        return ((digit > 0 && digit < 9) || digit === '.' || digit === '-')
+    },
+    isOperator: function(digit) {
+        return (digit === '+' || digit === '-' || digit === '*' || digit === '/' || digit === '%')
     },
     operate: function(op, a, b) {
         a = Number(a);
