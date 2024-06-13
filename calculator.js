@@ -110,7 +110,7 @@ function calcHandler(input) {
                     Calc.result = Calc.operate(Calc.operator, Calc.num1, Calc.num2);
                     Calc.operator = input;
                     Calc.num1 = Calc.result;
-                    display.textContent = isFinite(Calc.result) ? Calc.result : "ERROR";;
+                    display.textContent = isFinite(Calc.result) ? Calc.result : "ERROR";
                     Calc.state = States.STATE_SECOND_NUM_START;
                 } else if (input === '=') {
                     Calc.num2 = display.textContent;
