@@ -1,3 +1,5 @@
+const DISPLAY_CHAR_WIDTH = 16;
+
 function isNumber(digit) {
     return (Number.isInteger(+digit) || digit === '.')
 }
@@ -56,7 +58,8 @@ const Calc = {
 
 function numBtnHandler(event) {
     let input = event.target.innerText;
-    if (input === '.' && Calc.currNum.includes('.')) {
+    if ((input === '.' && Calc.currNum.includes('.')) 
+        || Calc.currNum.length >= DISPLAY_CHAR_WIDTH) {
         return;
     }
 
