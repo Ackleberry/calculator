@@ -80,9 +80,13 @@ function opBtnHandler(event) {
 }
 
 function eqlBtnHandler(event) {
-    Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
-    display.innerText = Calc.currNum;
-    Calc.prevNum = '';
+    if (Calc.prevNum === '' || Calc.currNum === '') {
+        return;
+    }
+
+    Calc.prevNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
+    display.innerText = Calc.prevNum;
+    Calc.currNum = '';
 }
 
 function delBtnHandler(event) {
