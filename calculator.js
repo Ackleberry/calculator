@@ -13,8 +13,8 @@ const Calc = {
     operator: '',
 
     reset: function() {
-        this.currNum = '',
-        this.prevNum = '',
+        this.currNum = '';
+        this.prevNum = '';
         this.operator = '';
     },
 
@@ -77,7 +77,6 @@ function opBtnHandler(event) {
 }
 
 function eqlBtnHandler(event) {
-    let input = event.target.innerText;
     Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
     display.innerText = Calc.currNum;
     Calc.prevNum = '';
@@ -94,7 +93,7 @@ function clrBtnHandler(event) {
 }
 
 function signBtnHandler(event) {
-    Calc.currNum = Calc.currNum * -1;
+    Calc.currNum *= -1;
     display.innerText = Calc.currNum;
 }
 
@@ -117,7 +116,4 @@ clearBtn.addEventListener('click', clrBtnHandler)
 
 const signBtn = document.querySelector('.button-sign')
 signBtn.addEventListener('click', signBtnHandler)
-
-
-Calc.reset()
 
