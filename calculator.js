@@ -1,5 +1,3 @@
-// FIXME: We have to '-' signs on the calculator!
-
 function isNumber(digit) {
     return (Number.isInteger(+digit) || digit === '.')
 }
@@ -56,51 +54,70 @@ const Calc = {
     }
 }
 
-function calcHandler(input) {
+function numBtnHandler(event) {
+    let input = event.target.innerText;
     if (input === '.' && Calc.currNum.includes('.')) {
         return;
     }
 
-    if (isNumber(input)) {
-        Calc.currNum += input;
-        display.innerText = Calc.currNum;
-    } else if (isOperator(input)) {
-        if (Calc.prevNum !== '' && Calc.currNum !== '') {
-            Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
-            display.innerText = Calc.currNum;
-        }
-        
-        Calc.prevNum = Calc.currNum;
-        Calc.operator = input;
-        Calc.currNum = '';
-    } else if (input === '=') {
+    Calc.currNum += input;
+    display.innerText = Calc.currNum;
+}
+
+function opBtnHandler(event) {
+    let input = event.target.innerText;
+    if (Calc.prevNum !== '' && Calc.currNum !== '') {
         Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
         display.innerText = Calc.currNum;
-        Calc.prevNum = '';
     }
-}
-
-function interfaceInput(event) {
-    calcHandler(event.target.innerText);
-}
-
-function keyboardInput(event) {
-    let key = event.key;
     
-    if (Calc.isNumber(key) || Calc.isOperator(key)) {
-        calcHandler(key);
-    } else if (key === 'Enter') {
-        key = '=';
-        calcHandler(key);
-    }
+    Calc.prevNum = Calc.currNum;
+    Calc.operator = input;
+    Calc.currNum = '';
 }
 
-const buttons = document.querySelectorAll('button');
-buttons.forEach((button) => {
-    button.addEventListener('click', interfaceInput);
-})
+function eqlBtnHandler(event) {
+    let input = event.target.innerText;
+    Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
+    display.innerText = Calc.currNum;
+    Calc.prevNum = '';
+}
 
-document.addEventListener('keypress', keyboardInput);
+function delBtnHandler(event) {
+    Calc.currNum = Calc.currNum.slice(0, -1);
+    display.innerText = Calc.currNum;
+}
+
+function clrBtnHandler(event) {
+    Calc.reset();
+    display.innerText = '';
+}
+
+function signBtnHandler(event) {
+    Calc.currNum = Calc.currNum * -1;
+    display.innerText = Calc.currNum;
+}
+
 let display = document.querySelector('.display');
+
+const numBtns = document.querySelectorAll('.button-num');
+numBtns.forEach((button) => { button.addEventListener('click', numBtnHandler) })
+
+const opBtns = document.querySelectorAll('.button-op');
+opBtns.forEach((button) => { button.addEventListener('click', opBtnHandler) })
+
+const equalBtn = document.querySelector('.button-eql')
+equalBtn.addEventListener('click', eqlBtnHandler)
+
+const deleteBtn = document.querySelector('.button-del')
+deleteBtn.addEventListener('click', delBtnHandler)
+
+const clearBtn = document.querySelector('.button-clr')
+clearBtn.addEventListener('click', clrBtnHandler)
+
+const signBtn = document.querySelector('.button-sign')
+signBtn.addEventListener('click', signBtnHandler)
+
+
 Calc.reset()
 

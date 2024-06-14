@@ -47,7 +47,7 @@ button {
     background-color: #989eb18a;
 }
 
-.button-alt {
+.button-clr, .button-del, .button-eql {
     background-color: #d76144;
 }
 
