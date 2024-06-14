@@ -1,24 +1,23 @@
-const Input = {
-    isNumber: function(digit) {
-        return ((digit >= 0 && digit <= 9) || digit === '.' || digit === '-')
-    },
-    isOperator: function(digit) {
-        return (digit === '+' || digit === '-' || digit === '*' || digit === '/' || digit === '%')
-    }
+// FIXME: We have to '-' signs on the calculator!
+
+function isNumber(digit) {
+    return (Number.isInteger(+digit) || digit === '.')
+}
+
+function isOperator(digit) {
+    return (digit === '+' || digit === '-' || digit === '*' || digit === '/' || digit === '%')
 }
 
 const Calc = {
     PRECISION: 100000000000,
-    inputA: '',
-    inputB: '',
+    currNum: '',
+    prevNum: '',
     operator: '',
-    result: '',
 
     reset: function() {
-        this.inputA = '',
-        this.inputB = '',
+        this.currNum = '',
+        this.prevNum = '',
         this.operator = '';
-        this.result = '';
     },
 
     operate: function(op, a, b) {
@@ -58,7 +57,27 @@ const Calc = {
 }
 
 function calcHandler(input) {
-    // Try to do this without a state machine. See if it reads better or worse.
+    if (input === '.' && Calc.currNum.includes('.')) {
+        return;
+    }
+
+    if (isNumber(input)) {
+        Calc.currNum += input;
+        display.innerText = Calc.currNum;
+    } else if (isOperator(input)) {
+        if (Calc.prevNum !== '' && Calc.currNum !== '') {
+            Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
+            display.innerText = Calc.currNum;
+        }
+        
+        Calc.prevNum = Calc.currNum;
+        Calc.operator = input;
+        Calc.currNum = '';
+    } else if (input === '=') {
+        Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
+        display.innerText = Calc.currNum;
+        Calc.prevNum = '';
+    }
 }
 
 function interfaceInput(event) {
