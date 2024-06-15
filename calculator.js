@@ -12,16 +12,12 @@ const Calc = {
     PRECISION: 100000000000,
     currNum: '',
     prevNum: '',
-    result: '',
     operator: '',
 
     clear: function() {
         this.currNum = '';
         this.prevNum = '';
         this.operator = '';
-    },
-    isEmpty: function() {
-        return Calc.prevNum === '' && Calc.currNum === '';
     },
     isFull: function() {
         return Calc.prevNum !== '' && Calc.currNum !== '';
@@ -76,12 +72,9 @@ function numBtnHandler(event) {
 function opBtnHandler(event) {
     let input = event.target.innerText;
 
-    if (Calc.isEmpty() && Calc.result !== '') {
-        Calc.currNum = Calc.result;
-    } else if (Calc.isFull()) {
-        Calc.result = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
-        display.innerText = Calc.result;
-        Calc.currNum = Calc.result;
+    if (Calc.isFull()) {
+        Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
+        display.innerText = Calc.currNum;
     }
     
     Calc.prevNum = Calc.currNum;
@@ -91,9 +84,9 @@ function opBtnHandler(event) {
 
 function eqlBtnHandler(event) {
     if (Calc.prevNum !== '' && Calc.currNum !== '') {
-        Calc.result = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
-        display.innerText = Calc.result;
-        Calc.clear()
+        Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
+        display.innerText = Calc.currNum;
+        Calc.prevNum = '';
     }
 }
 
