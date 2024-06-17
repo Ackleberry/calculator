@@ -74,7 +74,7 @@ function opBtnHandler(event) {
 
     if (Calc.isFull()) {
         Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
-        display.innerText = Calc.currNum;
+        display.innerText = isFinite(Calc.currNum) ? Calc.currNum : "ERROR";
     }
     
     Calc.prevNum = Calc.currNum;
@@ -85,7 +85,7 @@ function opBtnHandler(event) {
 function eqlBtnHandler(event) {
     if (Calc.prevNum !== '' && Calc.currNum !== '') {
         Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
-        display.innerText = Calc.currNum;
+        display.innerText = isFinite(Calc.currNum) ? Calc.currNum : "ERROR";
         Calc.prevNum = '';
     }
 }
