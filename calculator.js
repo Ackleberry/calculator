@@ -16,7 +16,7 @@ class Calculator {
         return calc.prevNum !== '' && calc.currNum !== '';
     }
 
-    operate(op, a, b) {
+    compute(op, a, b) {
         a = Number(a);
         b = Number(b);
         
@@ -86,7 +86,7 @@ function opBtnHandler(event) {
     let input = event.target.innerText;
 
     if (calc.isFull()) {
-        calc.currNum = calc.operate(calc.operator, calc.prevNum, calc.currNum);
+        calc.currNum = calc.compute(calc.operator, calc.prevNum, calc.currNum);
         display.innerText = updateDisplay(calc.currNum);
         calc.op_complete = true;
     }
@@ -98,7 +98,7 @@ function opBtnHandler(event) {
 
 function eqlBtnHandler(event) {
     if (calc.prevNum !== '' && calc.currNum !== '') {
-        calc.currNum = calc.operate(calc.operator, calc.prevNum, calc.currNum);
+        calc.currNum = calc.compute(calc.operator, calc.prevNum, calc.currNum);
         display.innerText = updateDisplay(calc.currNum);
         calc.op_complete = true;
         calc.prevNum = '';
