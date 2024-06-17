@@ -8,6 +8,10 @@ function isOperator(digit) {
     return (digit === '+' || digit === '-' || digit === '*' || digit === '/' || digit === '%')
 }
 
+function updateDisplay(val) {
+    return isFinite(val) ? val : "ERROR";
+}
+
 const Calc = {
     PRECISION: 100000000000,
     currNum: '',
@@ -74,7 +78,7 @@ function opBtnHandler(event) {
 
     if (Calc.isFull()) {
         Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
-        display.innerText = isFinite(Calc.currNum) ? Calc.currNum : "ERROR";
+        display.innerText = updateDisplay(Calc.currNum);;
     }
     
     Calc.prevNum = Calc.currNum;
@@ -85,7 +89,7 @@ function opBtnHandler(event) {
 function eqlBtnHandler(event) {
     if (Calc.prevNum !== '' && Calc.currNum !== '') {
         Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
-        display.innerText = isFinite(Calc.currNum) ? Calc.currNum : "ERROR";
+        display.innerText = updateDisplay(Calc.currNum);
         Calc.prevNum = '';
     }
 }
