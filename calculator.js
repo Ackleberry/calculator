@@ -21,11 +21,13 @@ const Calc = {
     currNum: '',
     prevNum: '',
     operator: '',
+    op_complete: false,
 
     clear: function() {
         this.currNum = '';
         this.prevNum = '';
         this.operator = '';
+        this.op_complete = false;
     },
     isFull: function() {
         return Calc.prevNum !== '' && Calc.currNum !== '';
@@ -73,8 +75,9 @@ function numBtnHandler(event) {
         return;
     }
 
-    Calc.currNum += input;
+    Calc.currNum = (Calc.op_complete) ? input : (Calc.currNum + input);
     display.innerText = Calc.currNum;
+    Calc.op_complete = false;
 }
 
 function opBtnHandler(event) {
@@ -83,6 +86,7 @@ function opBtnHandler(event) {
     if (Calc.isFull()) {
         Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
         display.innerText = updateDisplay(Calc.currNum);
+        Calc.op_complete = true;
     }
     
     Calc.prevNum = Calc.currNum;
@@ -94,12 +98,13 @@ function eqlBtnHandler(event) {
     if (Calc.prevNum !== '' && Calc.currNum !== '') {
         Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
         display.innerText = updateDisplay(Calc.currNum);
+        Calc.op_complete = true;
         Calc.prevNum = '';
     }
 }
 
 function delBtnHandler(event) {
-    if (typeof(Calc.currNum) === 'String') {
+    if (Calc.op_complete === false) {
         Calc.currNum = Calc.currNum.slice(0, -1);
         display.innerText = Calc.currNum;
     }
