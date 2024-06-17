@@ -9,7 +9,8 @@ function isOperator(digit) {
 }
 
 function updateDisplay(num) {
-    if (num === '' || (num.toString().length >= DISPLAY_CHAR_WIDTH)) {
+    num = Number(num);
+    if (!isFinite(num) || (num.toString().length >= DISPLAY_CHAR_WIDTH)) {
         return 'ERROR';
     }
     return num;
@@ -61,8 +62,7 @@ const Calc = {
 
         console.log(`A: ${a}, OP: ${op}, B: ${b}, RES: ${res}`);
 
-        /* '' signals an error */
-        return isFinite(res) ? res : '';
+        return res;
     }
 }
 
@@ -99,8 +99,10 @@ function eqlBtnHandler(event) {
 }
 
 function delBtnHandler(event) {
-    Calc.currNum = Calc.currNum.toString().slice(0, -1);
-    display.innerText = Calc.currNum;
+    if (typeof(Calc.currNum) === 'String') {
+        Calc.currNum = Calc.currNum.slice(0, -1);
+        display.innerText = Calc.currNum;
+    }
 }
 
 function clrBtnHandler(event) {
