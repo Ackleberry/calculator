@@ -8,8 +8,11 @@ function isOperator(digit) {
     return (digit === '+' || digit === '-' || digit === '*' || digit === '/' || digit === '%')
 }
 
-function updateDisplay(val) {
-    return (val !== '') ? val : 'ERROR';
+function updateDisplay(num) {
+    if (num === '' || (num.toString().length >= DISPLAY_CHAR_WIDTH)) {
+        return 'ERROR';
+    }
+    return num;
 }
 
 const Calc = {
@@ -29,8 +32,6 @@ const Calc = {
     operate: function(op, a, b) {
         a = Number(a);
         b = Number(b);
-
-        console.log(`OP: ${op}, A: ${a}, B: ${b}`);
         
         let res;
         switch(op) {
@@ -57,6 +58,8 @@ const Calc = {
         if (!Number.isInteger(a) || !Number.isInteger(b)) {
             res = Math.round(this.PRECISION * res) / this.PRECISION;
         }
+
+        console.log(`A: ${a}, OP: ${op}, B: ${b}, RES: ${res}`);
 
         /* '' signals an error */
         return isFinite(res) ? res : '';
