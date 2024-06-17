@@ -99,7 +99,7 @@ function eqlBtnHandler(event) {
 }
 
 function delBtnHandler(event) {
-    Calc.currNum = Calc.currNum.slice(0, -1);
+    Calc.currNum = Calc.currNum.toString().slice(0, -1);
     display.innerText = Calc.currNum;
 }
 
@@ -132,4 +132,21 @@ clearBtn.addEventListener('click', clrBtnHandler)
 
 const signBtn = document.querySelector('.button-sign')
 signBtn.addEventListener('click', signBtnHandler)
+
+document.addEventListener('keydown', (event) => {
+    let key = event.key;
+    if (isNumber(key)) {
+        numBtns.forEach((button) => { if (button.innerText === key) button.click(); });
+    } else if (isOperator(key)) {
+        opBtns.forEach((button) => { if (button.innerText === key) button.click(); });
+    } else if (key === '=' || key === 'Enter') {
+        equalBtn.click();
+    } else if (key === 'Backspace') {
+        deleteBtn.click();
+    } else if (key === 'Escape') {
+        clearBtn.click();
+    } else if (key === '_') {
+        signBtn.click();
+    }
+});
 
