@@ -78,7 +78,7 @@ function opBtnHandler(event) {
 
     if (Calc.isFull()) {
         Calc.currNum = Calc.operate(Calc.operator, Calc.prevNum, Calc.currNum);
-        display.innerText = updateDisplay(Calc.currNum);;
+        display.innerText = updateDisplay(Calc.currNum);
     }
     
     Calc.prevNum = Calc.currNum;
