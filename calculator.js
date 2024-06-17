@@ -9,7 +9,7 @@ function isOperator(digit) {
 }
 
 function updateDisplay(val) {
-    return isFinite(val) ? val : "ERROR";
+    return (val !== '') ? val : 'ERROR';
 }
 
 const Calc = {
@@ -58,7 +58,8 @@ const Calc = {
             res = Math.round(this.PRECISION * res) / this.PRECISION;
         }
 
-        return res;
+        /* '' signals an error */
+        return isFinite(res) ? res : '';
     }
 }
 
