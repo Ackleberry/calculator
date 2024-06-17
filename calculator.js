@@ -58,7 +58,7 @@ const Calc = {
             break;
         }
     
-        if (!Number.isInteger(a) || !Number.isInteger(b)) {
+        if (!Number.isInteger(res)) {
             res = Math.round(this.PRECISION * res) / this.PRECISION;
         }
 
