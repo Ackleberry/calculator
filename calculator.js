@@ -112,7 +112,7 @@ class Calculator {
 class Display {
     constructor(display) {
         this.DISPLAY_CHAR_WIDTH = 16;
-        this.displayObj = display;
+        this._displayObj = display;
     }
 
     update(val) {
@@ -120,11 +120,11 @@ class Display {
         if (!isFinite(val) || (val.toString().length >= this.DISPLAY_CHAR_WIDTH)) {
             return 'ERROR';
         }
-        this.displayObj.innerText = val;
+        this._displayObj.innerText = val;
     }
 
     clear() {
-        this.displayObj.innerText = '';
+        this._displayObj.innerText = '';
     }
 }
 
