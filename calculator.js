@@ -1,21 +1,75 @@
 class Calculator {
-    constructor(display, precision) {
-        this.display = display;
+    constructor(precision) {
         this.PRECISION = 10 ** precision;
-        this.clear();
+        this.resetState();
     }
 
-    clear() {
-        this.currNum = '';
-        this.prevNum = '';
-        this.operator = '';
-        this.op_complete = false;
+    get operator() {
+        return this._operator;
     }
 
-    isFull() {
-        return calc.prevNum !== '' && calc.currNum !== '';
+    set operator(val) {
+        this._operator = val;
     }
 
+    get currNum() {
+        return this._currNum;
+    }
+
+    set currNum(val) {
+        this._currNum = val;
+    }
+
+    get prevNum() {
+        return this._prevNum;
+    }
+
+    set prevNum(val) {
+        this._prevNum = val;
+    }
+
+    resetState() {
+        this._currNum = '';
+        this._prevNum = '';
+        this._operator = '';
+        this._op_complete = false;
+    }
+
+    has2Inputs() {
+        return calc._prevNum !== '' && calc._currNum !== '';
+    }
+
+    /**
+     * Adds a digit onto the calculators current input
+     * @param {string} digit 
+     */
+    inputAddDigit(digit) {
+        calc._currNum = (calc._op_complete) ? digit : (calc._currNum + digit);
+        calc._op_complete = false;
+    }
+
+    /**
+     * Completes the current input and pushes it onto the calculators stack
+     */
+    inputNumComplete() {
+        calc._prevNum = calc._currNum;
+        calc._currNum = '';
+    }
+
+    isOperationComplete() {
+        return this._op_complete;
+    }
+
+    /**
+     * Toggles the current numbers sign
+     */
+    inputToggleSign() {
+       return calc._currNum *= -1;
+    }
+
+    /**
+     * Computes the result based off the calculators inputs and operator
+     */
     compute(op, a, b) {
         a = Number(a);
         b = Number(b);
@@ -48,11 +102,31 @@ class Calculator {
 
         console.log(`A: ${a}, OP: ${op}, B: ${b}, RES: ${res}`);
 
+        calc._op_complete = true;
+        calc._prevNum = '';
+
         return res;
     }
 }
 
-const DISPLAY_CHAR_WIDTH = 16;
+class Display {
+    constructor(display) {
+        this.DISPLAY_CHAR_WIDTH = 16;
+        this.displayObj = display;
+    }
+
+    update(val) {
+        val = Number(val);
+        if (!isFinite(val) || (val.toString().length >= this.DISPLAY_CHAR_WIDTH)) {
+            return 'ERROR';
+        }
+        this.displayObj.innerText = val;
+    }
+
+    clear() {
+        this.displayObj.innerText = '';
+    }
+}
 
 function isNumber(digit) {
     return (Number.isInteger(+digit) || digit === '.')
@@ -62,67 +136,52 @@ function isOperator(digit) {
     return (digit === '+' || digit === '-' || digit === '*' || digit === '/' || digit === '%')
 }
 
-function updateDisplay(num) {
-    num = Number(num);
-    if (!isFinite(num) || (num.toString().length >= DISPLAY_CHAR_WIDTH)) {
-        return 'ERROR';
-    }
-    return num;
-}
-
 function numBtnHandler(event) {
+    console.log("hello!");
     let input = event.target.innerText;
     if ((input === '.' && calc.currNum.includes('.')) 
-        || calc.currNum.length >= DISPLAY_CHAR_WIDTH) {
+        || calc.currNum.length >= display.DISPLAY_CHAR_WIDTH) {
         return;
     }
 
-    calc.currNum = (calc.op_complete) ? input : (calc.currNum + input);
-    display.innerText = calc.currNum;
-    calc.op_complete = false;
+    calc.inputAddDigit(input);
+    display.update(calc.currNum);
 }
 
 function opBtnHandler(event) {
     let input = event.target.innerText;
 
-    if (calc.isFull()) {
+    if (calc.has2Inputs()) {
         calc.currNum = calc.compute(calc.operator, calc.prevNum, calc.currNum);
-        display.innerText = updateDisplay(calc.currNum);
-        calc.op_complete = true;
+        display.update(calc.currNum);
     }
-    
-    calc.prevNum = calc.currNum;
-    calc.currNum = '';
+
+    calc.inputNumComplete()
     calc.operator = input;
 }
 
 function eqlBtnHandler(event) {
-    if (calc.prevNum !== '' && calc.currNum !== '') {
+    if (calc.has2Inputs()) {
         calc.currNum = calc.compute(calc.operator, calc.prevNum, calc.currNum);
-        display.innerText = updateDisplay(calc.currNum);
-        calc.op_complete = true;
-        calc.prevNum = '';
+        display.update(calc.currNum);
     }
 }
 
 function delBtnHandler(event) {
-    if (calc.op_complete === false) {
+    if (!calc.isOperationComplete()) {
         calc.currNum = calc.currNum.slice(0, -1);
-        display.innerText = calc.currNum;
+        display.update(calc.currNum);
     }
 }
 
 function clrBtnHandler(event) {
-    calc.clear();
-    display.innerText = '';
+    calc.resetState();
+    display.clear();
 }
 
 function signBtnHandler(event) {
-    calc.currNum *= -1;
-    display.innerText = calc.currNum;
+    display.update(calc.inputToggleSign());
 }
-
-let display = document.querySelector('.display');
 
 const numBtns = document.querySelectorAll('.button-num');
 numBtns.forEach((button) => { button.addEventListener('click', numBtnHandler) })
@@ -159,4 +218,5 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-const calc = new Calculator(display.innerText, 11);
+const display = new Display(document.querySelector('.display'))
+const calc = new Calculator(11);
