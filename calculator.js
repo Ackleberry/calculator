@@ -36,7 +36,7 @@ class Calculator {
     }
 
     has2Inputs() {
-        return calc._prevNum !== '' && calc._currNum !== '';
+        return (calc._prevNum !== '' && calc._currNum !== '');
     }
 
     /**
@@ -46,33 +46,31 @@ class Calculator {
     inputAddDigit(digit) {
         calc._currNum = (calc._op_complete) ? digit : (calc._currNum + digit);
         calc._op_complete = false;
+        return calc._currNum;
     }
 
     /**
-     * Completes the current input and pushes it onto the calculators stack
+     * Completes the current input and pushes the value onto the calculators stack
      */
     inputNumComplete() {
         calc._prevNum = calc._currNum;
         calc._currNum = '';
     }
 
+    /**
+     * True if the calculator is idle
+     */
     isOperationComplete() {
         return this._op_complete;
     }
 
     /**
-     * Toggles the current numbers sign
-     */
-    inputToggleSign() {
-       return calc._currNum *= -1;
-    }
-
-    /**
      * Computes the result based off the calculators inputs and operator
      */
-    compute(op, a, b) {
-        a = Number(a);
-        b = Number(b);
+    compute() {
+        let a = Number(calc._prevNum);
+        let b = Number(calc._currNum);
+        let op = calc._operator;
         
         let res;
         switch(op) {
@@ -104,7 +102,7 @@ class Calculator {
 
         calc._op_complete = true;
         calc._prevNum = '';
-
+        calc._currNum = res;
         return res;
     }
 }
@@ -137,33 +135,32 @@ function isOperator(digit) {
 }
 
 function numBtnHandler(event) {
-    console.log("hello!");
     let input = event.target.innerText;
     if ((input === '.' && calc.currNum.includes('.')) 
         || calc.currNum.length >= display.DISPLAY_CHAR_WIDTH) {
         return;
     }
 
-    calc.inputAddDigit(input);
-    display.update(calc.currNum);
+    let val = calc.inputAddDigit(input);
+    display.update(val);
 }
 
 function opBtnHandler(event) {
     let input = event.target.innerText;
 
     if (calc.has2Inputs()) {
-        calc.currNum = calc.compute(calc.operator, calc.prevNum, calc.currNum);
-        display.update(calc.currNum);
+        let res = calc.compute();
+        display.update(res);
     }
 
-    calc.inputNumComplete()
+    calc.inputNumComplete();
     calc.operator = input;
 }
 
 function eqlBtnHandler(event) {
     if (calc.has2Inputs()) {
-        calc.currNum = calc.compute(calc.operator, calc.prevNum, calc.currNum);
-        display.update(calc.currNum);
+        let res = calc.compute();
+        display.update(res);
     }
 }
 
@@ -180,7 +177,7 @@ function clrBtnHandler(event) {
 }
 
 function signBtnHandler(event) {
-    display.update(calc.inputToggleSign());
+    display.update(calc.currNum *= -1);
 }
 
 const numBtns = document.querySelectorAll('.button-num');
@@ -219,4 +216,5 @@ document.addEventListener('keydown', (event) => {
 });
 
 const display = new Display(document.querySelector('.display'))
-const calc = new Calculator(11);
+let precision = 11 // Digits
+const calc = new Calculator(precision);
